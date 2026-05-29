@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Judicaël BONDON — Chargé de Recrutement Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root{
+  --navy:#0F172A;
+  --blue:#1A3B5C;
+  --gold:#C9A96E;
+  --gold-light:#E8D5A3;
+  --sand:#E6DFCF;
+  --paper:#F5F2EB;
+  --muted:#94A3B8;
+  --border:rgba(255,255,255,0.08);
+  --card:rgba(30,41,59,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:80px;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:#E2E8F0;overflow-x:hidden;line-height:1.5;}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:-.01em;}
+
+/* CURSOR */
+@media (pointer: coarse) { .cursor, .cursor-ring { display: none; } }
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;mix-blend-mode:difference;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,169,110,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .12s ease,top .12s ease;}
+
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:200;width:0%;transition:width .1s;}
+
+/* ELOÏSE BANDEAU */
+#eloise-badge{
+  position:fixed;bottom:32px;right:32px;z-index:150;
+  background:rgba(15,23,42,0.95);border:1px solid var(--gold);
+  padding:14px 20px;border-radius:8px;
+  font-size:13px;color:var(--gold);
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s,transform .5s;
+  backdrop-filter:blur(12px);
+  max-width:280px;line-height:1.5;
+}
+#eloise-badge.show{opacity:1;transform:translateY(0);}
+#eloise-badge strong{display:block;font-weight:500;margin-bottom:4px;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 64px;
+  background:rgba(15,23,42,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--sand);}
+.nav-links{display:flex;gap:36px;}
+.nav-links a{font-size:12px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{font-size:12px;padding:8px 20px;border:1px solid var(--gold);color:var(--gold);border-radius:30px;text-decoration:none;font-weight:500;transition:all .2s;}
+.nav-cta:hover{background:var(--gold);color:var(--navy);}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:80px;position:relative;overflow:hidden;}
+.hero::after{content:"";position:absolute;inset:0;background:url("images/nantes-bg.jpg") center/cover no-repeat;opacity:0.08;z-index:0;pointer-events:none;}
+canvas#particles{position:absolute;inset:0;z-index:0;opacity:.4;}
+.hero-left{padding:80px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;opacity:0;animation:fadeUp .6s .1s forwards;}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,5vw,80px);line-height:1.02;margin-bottom:16px;opacity:0;animation:fadeUp .6s .2s forwards;}
+h1 em{font-style:italic;color:var(--gold);}
+.subtitle{font-size:16px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.75;margin-bottom:40px;max-width:420px;opacity:0;animation:fadeUp .6s .3s forwards;}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s .4s forwards;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:30px;font-size:13px;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{box-shadow:0 8px 28px rgba(201,169,110,0.4);}
+.btn-secondary{border:1px solid rgba(255,255,255,0.25);color:white;}
+.btn-secondary:hover{border-color:white;}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);animation:ripple-anim .6s linear;pointer-events:none;}
+@keyframes ripple-anim{to{transform:scale(4);opacity:0;}}
+
+/* HERO RIGHT */
+.hero-right{background:var(--blue);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;opacity:0;animation:fadeIn .8s .5s forwards;}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;height:100%;position:relative;z-index:1;}
+.metric-card{background:rgba(15,23,42,0.35);padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--border);transition:background .3s,transform .3s;cursor:default;}
+.metric-card:hover{background:rgba(15,23,42,0.55);transform:scale(1.02);}
+.metric-num{font-family:'Cormorant Garamond',serif;font-size:54px;line-height:1;margin-bottom:8px;}
+.metric-num span{color:var(--gold);}
+.metric-label{font-size:12px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.5;}
+
+/* SECTIONS */
+section{padding:100px 64px;}
+.section-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:56px;display:flex;align-items:center;gap:14px;}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1);max-width:160px;}
+
+/* PROFIL */
+.profil{background:#0A101E;}
+.profil-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:start;}
+.profil-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,3.5vw,52px);line-height:1.1;margin-bottom:24px;}
+.profil-text h2 em{font-style:italic;color:var(--gold);}
+.profil-text p{font-size:15px;line-height:1.85;color:rgba(255,255,255,0.65);margin-bottom:16px;}
+.profil-text strong{color:var(--sand);}
+.citation{margin-top:28px;padding:20px 24px;border-left:2px solid var(--gold);background:rgba(201,169,110,0.06);font-style:italic;font-size:14px;line-height:1.75;color:rgba(255,255,255,0.6);}
+.photo-wrap{display:flex;justify-content:center;margin-bottom:28px;}
+.photo-circle{width:120px;height:120px;border-radius:50%;border:2px solid #C9A96E;overflow:hidden;box-shadow:0 0 0 4px rgba(201,169,110,0.15);}
+.photo-circle img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.skills-list{display:flex;flex-direction:column;gap:18px;}
+.skill-row{display:flex;align-items:center;gap:12px;}
+.skill-name{font-size:12px;font-weight:400;color:var(--sand);min-width:178px;}
+.skill-bar{flex:1;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--gold));border-radius:2px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.skill-pct{font-size:11px;color:var(--gold);min-width:32px;text-align:right;}
+
+/* KPI avec compteurs */
+.kpi-section{background:#080E1A;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.kpi-card{padding:48px 32px;background:var(--card);border:1px solid var(--border);text-align:center;transition:background .3s,transform .3s;}
+.kpi-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-4px);}
+.kpi-num{font-family:'Cormorant Garamond',serif;font-size:52px;color:var(--gold);margin-bottom:8px;line-height:1;}
+.kpi-lbl{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.5;}
+
+/* TIMELINE */
+.parcours{background:var(--navy);}
+.timeline{position:relative;max-width:840px;}
+.timeline::before{content:'';position:absolute;left:23px;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.07);}
+.tl-item{display:grid;grid-template-columns:48px 1fr;gap:28px;margin-bottom:48px;position:relative;}
+.tl-dot{width:48px;height:48px;border-radius:50%;background:var(--blue);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);flex-shrink:0;position:relative;z-index:1;transition:transform .3s,box-shadow .3s;}
+.tl-item:hover .tl-dot{transform:scale(1.1);box-shadow:0 0 20px rgba(201,169,110,0.3);}
+.tl-date{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:3px;}
+.tl-company{font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:10px;}
+.tl-desc{font-size:13px;line-height:1.75;color:rgba(255,255,255,0.6);}
+.tl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.tag{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.2);color:var(--gold);}
+
+/* RÉALISATIONS — card 3D */
+.portfolio{background:#080E1A;}
+.real-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px;}
+.real-card{padding:40px 32px;background:var(--card);border:1px solid var(--border);transition:background .3s;transform-style:preserve-3d;perspective:600px;cursor:default;}
+.real-card:hover{background:rgba(255,255,255,0.06);}
+.real-icon{font-size:26px;color:var(--gold);margin-bottom:20px;}
+.real-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:10px;line-height:1.2;}
+.real-card p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
+.real-stat{margin-top:16px;font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);line-height:1;}
+.real-stat-lbl{font-size:11px;color:rgba(255,255,255,0.3);}
+.indic-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.indic-card{padding:36px 32px;background:var(--card);border:1px solid var(--border);}
+.indic-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.indic-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.indic-row:last-child{border-bottom:none;}
+.indic-key{font-size:12px;color:rgba(255,255,255,0.4);}
+.indic-val{font-size:13px;font-weight:500;}
+.indic-val.accent{color:var(--gold);}
+
+/* CTPI-R avec radar canvas */
+.ctpi-section{background:#0A101E;padding:80px 64px;}
+.ctpi-grid{display:grid;grid-template-columns:auto 1fr;gap:80px;align-items:center;}
+.ctpi-bars{display:flex;flex-direction:column;gap:20px;min-width:360px;}
+.ctpi-row{display:flex;align-items:center;gap:14px;}
+.ctpi-label{font-size:13px;min-width:150px;color:var(--sand);}
+.ctpi-bar{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.ctpi-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--gold));width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1);}
+.ctpi-pct{font-size:12px;color:var(--gold);min-width:36px;text-align:right;}
+.ctpi-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,32px);line-height:1.45;font-style:italic;color:rgba(255,255,255,0.7);margin-bottom:20px;}
+.ctpi-quote strong{color:white;font-style:normal;}
+
+/* VALEUR */
+.valeur{background:var(--navy);}
+.valeur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.valeur-card{padding:48px 32px;background:var(--card);border:1px solid var(--border);transition:background .3s,transform .3s;}
+.valeur-card:hover{background:rgba(255,255,255,0.06);transform:translateY(-4px);}
+.valeur-icon{font-size:28px;color:var(--gold);margin-bottom:22px;}
+.valeur-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:12px;}
+.valeur-card p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.75;}
+
+/* CONTACT */
+.contact{background:var(--blue);text-align:center;padding:80px 64px;}
+.contact h2{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5vw,70px);margin-bottom:14px;}
+.contact p{font-size:15px;opacity:.65;margin-bottom:40px;}
+.contact-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.contact-link{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:white;text-decoration:none;padding:14px 24px;background:rgba(255,255,255,0.12);border-radius:40px;transition:background .2s,transform .2s;}
+.contact-link:hover{background:rgba(255,255,255,0.22);transform:translateY(-2px);}
+
+footer{background:#060B14;padding:24px 64px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.04);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.9,.4,1),transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+@media(max-width:1000px){
+  nav{padding:14px 24px;}
+  .nav-links{display:none;}
+  .hero,.profil-grid,.kpi-grid,.real-grid,.valeur-grid,.ctpi-grid,.indic-grid{grid-template-columns:1fr;}
+  .hero-left{padding:60px 24px;}
+  .hero-right{min-height:280px;}
+  .ctpi-bars{min-width:unset;}
+  section,.ctpi-section,.contact{padding:60px 24px;}
+  footer{flex-direction:column;gap:8px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<div id="eloise-badge">
+  <strong>✦ Ce profil est interactif</strong>
+  Conçu spécifiquement pour votre duo Digital — Cabinet Experts Manpower Nantes.
+</div>
+
+<nav>
+  <span class="nav-name">Judicaël BONDON</span>
+  <div class="nav-links">
+    <a href="#profil">Profil</a>
+    <a href="#parcours">Parcours</a>
+    <a href="#realisations">Réalisations</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="mailto:bondon.judicael@gmail.com" class="nav-cta">Me contacter</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <canvas id="particles"></canvas>
+  <div class="hero-left">
+    <div class="eyebrow">Chargé de Recrutement & RH · Disponible immédiatement · Nantes (44)</div>
+    <h1 id="hero-title">Recrutement.<br>Pilotage.<br><em id="typed-word"></em></h1>
+    <p class="subtitle">Master 2 RH · +200 recrutements A→Z · Appétence digitale réelle · Psychologie du travail CNAM · Prêt à construire votre duo Digital.</p>
+    <div class="cta-row">
+      <a href="mailto:bondon.judicael@gmail.com" class="btn btn-primary" id="btn1"><i class="fas fa-envelope"></i> bondon.judicael@gmail.com</a>
+      <a href="tel:0782156519" class="btn btn-secondary"><i class="fas fa-phone-alt"></i> 07 82 15 65 19</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-num"><span>+200</span></div><div class="metric-label">Recrutements A→Z<br>en mode agence</div></div>
+      <div class="metric-card"><div class="metric-num">15<span>ans+</span></div><div class="metric-label">Environnements terrain<br>& pilotage</div></div>
+      <div class="metric-card"><div class="metric-num"><span>M2</span></div><div class="metric-label">Management RH<br>MBWAY 2025</div></div>
+      <div class="metric-card"><div class="metric-num">SaaS<span>+</span></div><div class="metric-label">Projet APIs · React<br>Appétence digitale</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFIL -->
+<section class="profil" id="profil">
+  <div class="section-label reveal">Qui je suis</div>
+  <div class="profil-grid">
+    <div class="profil-text reveal">
+      <h2>RH opérationnel,<br>relation client,<br><em>appétence digitale.</em></h2>
+      <p>Chez <strong>Randstad</strong>, en accompagnement direct avec la directrice d'agence Frédérique Ventura, j'ai exercé la double relation client/candidat propre à l'agence : qualifier le besoin entreprise, sourcer, présenter, suivre jusqu'au placement.</p>
+      <p>Trois ans chez <strong>Challancin Prévention Sécurité</strong> à piloter 10 à 30 recrutements par mois — sourcing multi-canal, préqualifications téléphoniques, viviers actifs, KPI. Avant ça, 10 ans chez <strong>Lidl France</strong> à coordonner un réseau commercial de 65 magasins.</p>
+      <p>En formation <strong>psychologie du travail au CNAM Nantes (IRMR3)</strong> — évaluation approfondie des motivations, des trajectoires, des signaux faibles dans un profil cadre.</p>
+      <div class="citation">"J'interviens là où les organisations ont besoin de structurer, décider, tenir la performance, coordonner et coopérer sans perdre le sens, l'utilité, la motivation, et la reconnaissance."</div>
+    </div>
+    <div class="reveal">
+      <div class="photo-wrap">
+        <div class="photo-circle">
+          <img src="images/votre-photo.jpg" alt="Judicaël BONDON" onerror="this.parentElement.style.background='rgba(201,169,110,0.2)'">
+        </div>
+      </div>
+      <div class="skills-list" id="skills-list">
+        <div class="skill-row"><div class="skill-name">Sourcing multi-canal</div><div class="skill-bar"><div class="skill-fill" data-pct="92"></div></div><div class="skill-pct">92%</div></div>
+        <div class="skill-row"><div class="skill-name">Préqualification téléphonique</div><div class="skill-bar"><div class="skill-fill" data-pct="90"></div></div><div class="skill-pct">90%</div></div>
+        <div class="skill-row"><div class="skill-name">Gestion de viviers actifs</div><div class="skill-bar"><div class="skill-fill" data-pct="88"></div></div><div class="skill-pct">88%</div></div>
+        <div class="skill-row"><div class="skill-name">Admin RH & contrats</div><div class="skill-bar"><div class="skill-fill" data-pct="90"></div></div><div class="skill-pct">90%</div></div>
+        <div class="skill-row"><div class="skill-name">Pilotage KPI/KAI</div><div class="skill-bar"><div class="skill-fill" data-pct="85"></div></div><div class="skill-pct">85%</div></div>
+        <div class="skill-row"><div class="skill-name">Relation client entreprise</div><div class="skill-bar"><div class="skill-fill" data-pct="75"></div></div><div class="skill-pct">75%</div></div>
+        <div class="skill-row"><div class="skill-name">Appétence digitale / APIs</div><div class="skill-bar"><div class="skill-fill" data-pct="72"></div></div><div class="skill-pct">72%</div></div>
+        <div class="skill-row"><div class="skill-name">Évaluation psychologique</div><div class="skill-bar"><div class="skill-fill" data-pct="80"></div></div><div class="skill-pct">80%</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI COMPTEURS -->
+<section class="kpi-section">
+  <div class="kpi-grid">
+    <div class="kpi-card reveal"><div class="kpi-num" data-target="200" data-prefix="+">0</div><div class="kpi-lbl">Recrutements A→Z<br>mode agence</div></div>
+    <div class="kpi-card reveal"><div class="kpi-num" data-target="200">0</div><div class="kpi-lbl">Contrats/mois<br>CDI · CDD · Avenants</div></div>
+    <div class="kpi-card reveal"><div class="kpi-num" data-target="130" data-suffix="K€">0</div><div class="kpi-lbl">Budget PDC<br>suivi Plan de Formation</div></div>
+    <div class="kpi-card reveal"><div class="kpi-num" data-target="465" data-suffix="K€">0</div><div class="kpi-lbl">Financements mobilisés<br>POEC FASTT transport</div></div>
+  </div>
+</section>
+
+<!-- PARCOURS -->
+<section class="parcours" id="parcours">
+  <div class="section-label reveal">Parcours</div>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-dot">R</div>
+      <div class="tl-content">
+        <div class="tl-date">2022 → 2025</div>
+        <div class="tl-title">Chargé RH — Recrutement & Administration</div>
+        <div class="tl-company">Challancin Prévention Sécurité · Nantes, Le Mans, Angers, Rennes</div>
+        <div class="tl-desc">+200 recrutements A→Z · 10 à 30 postes/mois · ATS Wink · viviers actifs · préqualifications · KPI/KAI · 200 contrats/mois · DPAE · PDC 130K€ · CSE/CSSCT · PMSMP/POEI</div>
+        <div class="tl-tags"><span class="tag">Mode agence</span><span class="tag">Profils pénuriques</span><span class="tag">Multi-régions</span><span class="tag">Reporting</span><span class="tag">Dialogue social</span></div>
+      </div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot">C</div>
+      <div class="tl-content">
+        <div class="tl-date">2025</div>
+        <div class="tl-title">Diagnostic RH — Mission conseil (contribution 85%)</div>
+        <div class="tl-company">Envie ERG / Groupe Estille · ESS/ESUS · Nantes</div>
+        <div class="tl-desc">30 pages · ROI estimé >1M€ coûts sociétaux évités · préconisations validées DRH · QVCT (4 actions ANACT) · SIRH Kelio · Subventions FSE/Horizon Europe</div>
+        <div class="tl-tags"><span class="tag">Politique RH</span><span class="tag">QVCT</span><span class="tag">GEPP</span><span class="tag">SIRH</span><span class="tag">ESS</span></div>
+      </div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot">L</div>
+      <div class="tl-content">
+        <div class="tl-date">2012 → 2022</div>
+        <div class="tl-title">Pilotage fonctionnel multi-sites</div>
+        <div class="tl-company">Lidl France · Direction Régionale DEVCO · 65 magasins Pays de la Loire</div>
+        <div class="tl-desc">Coordination réseau commercial · flux Food/Non-Food 1–12M€/semaine · pics 15M€ (opérations nationales) · >90 SPL sur 4 mois · réassorts J+2 · Top France FAV Rosé 2022</div>
+        <div class="tl-tags"><span class="tag">Réseau commercial</span><span class="tag">Multi-sites</span><span class="tag">Rigueur données</span><span class="tag">Pression opérationnelle</span></div>
+      </div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot">R</div>
+      <div class="tl-content">
+        <div class="tl-date">2003 → 2004</div>
+        <div class="tl-title">Chargé de Recrutement</div>
+        <div class="tl-company">Randstad · Nantes · Dir. Frédérique Ventura</div>
+        <div class="tl-desc">Double relation client/candidat · 90 reconversions PL/SPL · POEC FASTT 465K€ · qualification besoins clients · partenariats AFT-IFTIM & Promotrans · tests de qualification candidats</div>
+        <div class="tl-tags"><span class="tag">Relation client entreprise</span><span class="tag">Mode cabinet</span><span class="tag">Transport</span><span class="tag">FASTT</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RÉALISATIONS -->
+<section class="portfolio" id="realisations">
+  <div class="section-label reveal">Réalisations clés</div>
+  <div class="real-grid">
+    <div class="real-card reveal">
+      <div class="real-icon"><i class="fas fa-chart-line"></i></div>
+      <h3>Pilotage RH & indicateurs sociaux</h3>
+      <p>Transformation de données sociales dispersées en lectures de risques — KPI en KAI (prévention, QVCT, GEPP, label senior).</p>
+      <div class="real-stat">4 525</div>
+      <div class="real-stat-lbl">suivis médicaux pilotés (2023)</div>
+    </div>
+    <div class="real-card reveal">
+      <div class="real-icon"><i class="fas fa-users"></i></div>
+      <h3>Animation & accompagnement terrain</h3>
+      <p>+10 réunions collectives animées avec France Travail (Le Mans, Nantes, Saint-Nazaire). Présentations CODIR 5-10 personnes.</p>
+      <div class="real-stat">30+</div>
+      <div class="real-stat-lbl">PMSMP / 15 POEI pilotés</div>
+    </div>
+    <div class="real-card reveal">
+      <div class="real-icon"><i class="fas fa-globe"></i></div>
+      <h3>Réseau emploi-formation territorial</h3>
+      <p>Adapeila · Big-Bang de l'emploi · Collectif "Tout est Possible" · Fondation FACE Atlantique · Mozaïk RH.</p>
+      <div class="real-stat">>1M€</div>
+      <div class="real-stat-lbl">coûts sociétaux évités (Diagnostic ERG)</div>
+    </div>
+  </div>
+  <div class="indic-grid" style="margin-top:2px;">
+    <div class="indic-card reveal">
+      <div class="indic-title">Pyramide des âges Challancin (2023)</div>
+      <div class="indic-row"><div class="indic-key">46 ans et + en 2023</div><div class="indic-val accent">49,41% — 1 527 pers.</div></div>
+      <div class="indic-row"><div class="indic-key">46 ans et + en 2022</div><div class="indic-val">47,98% — 1 323 pers.</div></div>
+      <div class="indic-row"><div class="indic-key">Évolution</div><div class="indic-val accent">+15,41%</div></div>
+    </div>
+    <div class="indic-card reveal">
+      <div class="indic-title">Absentéisme & sécurité</div>
+      <div class="indic-row"><div class="indic-key">Taux absentéisme</div><div class="indic-val accent">6,4% (2023)</div></div>
+      <div class="indic-row"><div class="indic-key">Heures perdues maladie</div><div class="indic-val">37 379 h</div></div>
+      <div class="indic-row"><div class="indic-key">AT trajet</div><div class="indic-val">14 225 h</div></div>
+      <div class="indic-row"><div class="indic-key">Coût AT >150 jours</div><div class="indic-val accent">jusqu'à 29 K€</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTPI-R -->
+<section class="ctpi-section">
+  <div class="section-label reveal">Profil CTPI-R</div>
+  <div class="ctpi-grid">
+    <div class="ctpi-bars reveal" id="ctpi-bars">
+      <div class="ctpi-row"><div class="ctpi-label">Chef de projet</div><div class="ctpi-bar"><div class="ctpi-fill" data-pct="63"></div></div><div class="ctpi-pct">63%</div></div>
+      <div class="ctpi-row"><div class="ctpi-label">Stratégique</div><div class="ctpi-bar"><div class="ctpi-fill" data-pct="62"></div></div><div class="ctpi-pct">62%</div></div>
+      <div class="ctpi-row"><div class="ctpi-label">Entrepreneur</div><div class="ctpi-bar"><div class="ctpi-fill" data-pct="61"></div></div><div class="ctpi-pct">61%</div></div>
+    </div>
+    <div class="reveal">
+      <p class="ctpi-quote">"Profil adapté au <strong>pilotage d'activité</strong>, à la <strong>coordination d'équipe</strong> et à la <strong>conduite du changement</strong>."</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.35);margin-top:20px;line-height:1.7;">Ce portfolio illustre une capacité à piloter des équipes, des indicateurs KPI/KAI et des partenariats dans des environnements à enjeux sociaux et territoriaux.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALEUR -->
+<section class="valeur">
+  <div class="section-label reveal">Ce que j'apporte</div>
+  <div class="valeur-grid">
+    <div class="valeur-card reveal">
+      <div class="valeur-icon"><i class="fas fa-bolt"></i></div>
+      <h3>Opérationnel dès J+1</h3>
+      <p>Processus A→Z maîtrisé, ATS pratiqué, viviers à construire immédiatement. La montée en compétence sur le recrutement est derrière moi — pas devant.</p>
+    </div>
+    <div class="valeur-card reveal">
+      <div class="valeur-icon"><i class="fas fa-code"></i></div>
+      <h3>Lecture réelle des profils Digital</h3>
+      <p>Projet SaaS de préparation à l'entretien — intégration APIs LLM, interfaces web React, traitement données. Je comprends ce qu'un développeur full-stack ou un data engineer cherche — pas seulement son CV.</p>
+    </div>
+    <div class="valeur-card reveal">
+      <div class="valeur-icon"><i class="fas fa-brain"></i></div>
+      <h3>Évaluation au-delà du CV</h3>
+      <p>Formation psychologie du travail CNAM Nantes (IRMR3 en cours). Motivations, trajectoire, adéquation culturelle — ce que les outils seuls ne voient pas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <h2>Disponible immédiatement.</h2>
+  <p>Saint-Herblain (44) · RQTH sans aménagement de poste · Mobilité Nantes et périphérie</p>
+  <div class="contact-links">
+    <a href="mailto:bondon.judicael@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> bondon.judicael@gmail.com</a>
+    <a href="tel:0782156519" class="contact-link"><i class="fas fa-phone-alt"></i> 07 82 15 65 19</a>
+    <a href="https://www.linkedin.com/in/judicael-bondon/" target="_blank" class="contact-link"><i class="fab fa-linkedin-in"></i> LinkedIn Judicaël BONDON</a>
+  </div>
+</section>
+
+<footer>
+  <span>Judicaël BONDON · CV & Portfolio · Mai 2026</span>
+  <span>Confidentiel · Usage recrutement uniquement</span>
+</footer>
+
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,.btn,.metric-card,.real-card,.valeur-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2)';ring.style.transform='translate(-50%,-50%) scale(1.5)';});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)';});
+});
+
+// ─── PROGRESS BAR ───
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  pb.style.width=pct+'%';
+});
+
+// ─── ÉLOÏSE BADGE ───
+setTimeout(()=>{document.getElementById('eloise-badge').classList.add('show');},3000);
+setTimeout(()=>{document.getElementById('eloise-badge').classList.remove('show');},9000);
+
+// ─── TYPEWRITER ───
+const words=['Résultats.','Digital.','Duo.'];
+let wi=0,ci=0,del=false;
+const typed=document.getElementById('typed-word');
+function typewriter(){
+  const w=words[wi];
+  if(!del){typed.textContent=w.slice(0,ci+1);ci++;if(ci===w.length){del=true;setTimeout(typewriter,1800);return;}}
+  else{typed.textContent=w.slice(0,ci-1);ci--;if(ci===0){del=false;wi=(wi+1)%words.length;}}
+  setTimeout(typewriter,del?60:110);
+}
+setTimeout(typewriter,1200);
+
+// ─── PARTICLES CANVAS ───
+const cvs=document.getElementById('particles');
+const ctx=cvs.getContext('2d');
+function resize(){cvs.width=cvs.offsetWidth;cvs.height=cvs.offsetHeight;}
+resize();window.addEventListener('resize',resize);
+const pts=Array.from({length:50},()=>({x:Math.random()*cvs.width,y:Math.random()*cvs.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5}));
+function drawParticles(){
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>cvs.width)p.vx*=-1;
+    if(p.y<0||p.y>cvs.height)p.vy*=-1;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle='rgba(201,169,110,0.6)';ctx.fill();
+  });
+  pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
+    const d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(201,169,110,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}
+  }));
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ─── RIPPLE ───
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    const r=document.createElement('span');r.className='ripple';
+    const rect=btn.getBoundingClientRect();
+    const sz=Math.max(rect.width,rect.height);
+    r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px;`;
+    btn.appendChild(r);setTimeout(()=>r.remove(),600);
+  });
+});
+
+// ─── SCROLL OBSERVER ───
+const skillsAnimated={done:false};
+const kpiAnimated={done:false};
+const ctpiAnimated={done:false};
+
+function animateCount(el){
+  const target=+el.dataset.target;
+  const prefix=el.dataset.prefix||'';
+  const suffix=el.dataset.suffix||'';
+  let count=0;
+  const step=target/60;
+  const timer=setInterval(()=>{
+    count=Math.min(count+step,target);
+    el.textContent=prefix+Math.round(count)+suffix;
+    if(count>=target)clearInterval(timer);
+  },16);
+}
+
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*80);
+
+      // Skills bars
+      if(e.target.closest('#profil')&&!skillsAnimated.done){
+        skillsAnimated.done=true;
+        setTimeout(()=>{
+          document.querySelectorAll('.skill-fill').forEach(b=>{b.style.width=b.dataset.pct+'%';});
+        },400);
+      }
+      // KPI counters
+      if(e.target.closest('.kpi-section')&&!kpiAnimated.done){
+        kpiAnimated.done=true;
+        document.querySelectorAll('.kpi-num[data-target]').forEach(el=>animateCount(el));
+      }
+      // CTPI bars
+      if(e.target.id==='ctpi-bars'&&!ctpiAnimated.done){
+        ctpiAnimated.done=true;
+        setTimeout(()=>{
+          document.querySelectorAll('.ctpi-fill').forEach(b=>{b.style.width=b.dataset.pct+'%';});
+        },300);
+      }
+    }
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ─── 3D TILT on cards ───
+document.querySelectorAll('.real-card,.valeur-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-.5)*10;
+    const y=((e.clientY-r.top)/r.height-.5)*-10;
+    card.style.transform=`perspective(600px) rotateX(${y}deg) rotateY(${x}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+</script>
+</body>
+</html>
